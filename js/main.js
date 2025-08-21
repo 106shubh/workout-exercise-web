@@ -3,6 +3,15 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Interactive UI Elements for Workout Cards
     initializeInteractiveWorkoutCards();
+    
+    // Connect workout modal buttons to start workout functionality
+    const startWorkoutBtn = document.getElementById('startWorkoutBtn');
+    if (startWorkoutBtn) {
+        startWorkoutBtn.addEventListener('click', function() {
+            const workoutTitle = document.getElementById('modalWorkoutTitle').textContent;
+            startWorkout(workoutTitle);
+        });
+    }
     // Mobile Navigation Toggle
     const navLinks = document.getElementById('navLinks');
     const openMenu = document.getElementById('openMenu');
@@ -307,9 +316,54 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Function to start a workout
     function startWorkout(workoutTitle) {
-        // Create workout session interface
-        const workoutSession = document.createElement('div');
-        workoutSession.className = 'workout-session';
+        // Get the workout session element
+        const workoutSession = document.getElementById('workoutSession');
+        if (!workoutSession) {
+            console.error('Workout session element not found');
+            return;
+        }
+        
+        // Exercise item click functionality for set tracking
+        setTimeout(() => {
+            const exerciseItems = workoutSession.querySelectorAll('.exercise-item');
+            exerciseItems.forEach(item => {
+                // Toggle expanded state when clicking the exercise item
+                item.addEventListener('click', function() {
+                    this.classList.toggle('expanded');
+                });
+                
+                // Set circle click functionality
+                const setCircles = item.querySelectorAll('.set-circle');
+                setCircles.forEach(circle => {
+                    circle.addEventListener('click', function(e) {
+                        e.stopPropagation(); // Prevent triggering parent click
+                        this.classList.toggle('completed');
+                        
+                        // Check if all sets are completed
+                        const allSetsCompleted = [...setCircles].every(c => c.classList.contains('completed'));
+                        const statusEl = item.querySelector('.exercise-status');
+                        
+                        if (allSetsCompleted) {
+                            statusEl.textContent = 'Completed';
+                            statusEl.classList.add('completed');
+                        } else if ([...setCircles].some(c => c.classList.contains('completed'))) {
+                            statusEl.textContent = 'In Progress';
+                            statusEl.classList.add('in-progress');
+                            statusEl.classList.remove('completed');
+                        } else {
+                            statusEl.textContent = 'Pending';
+                            statusEl.classList.remove('in-progress', 'completed');
+                        }
+                    });
+                });
+            });
+        }, 500); // Short delay to ensure DOM is ready
+        
+        // Update the workout title in the session
+        const sessionWorkoutTitle = workoutSession.querySelector('#sessionWorkoutTitle');
+        if (sessionWorkoutTitle) {
+            sessionWorkoutTitle.textContent = workoutTitle;
+        }
         
         // Get exercises based on workout title
         let exercises;
@@ -354,69 +408,47 @@ document.addEventListener('DOMContentLoaded', function() {
                 exercises = [];
         }
         
-        // Create workout session content
-        workoutSession.innerHTML = `
-            <div class="workout-session-content">
-                <div class="session-header">
-                    <h2>${workoutTitle} Workout</h2>
-                    <span class="session-close">&times;</span>
-                </div>
-                <div class="session-timer">
-                    <div class="timer-display">00:00</div>
-                    <div class="timer-controls">
-                        <button class="timer-btn start"><i class="fas fa-play"></i></button>
-                        <button class="timer-btn pause"><i class="fas fa-pause"></i></button>
-                        <button class="timer-btn reset"><i class="fas fa-redo"></i></button>
+        // Populate the exercise list
+        const sessionExerciseList = workoutSession.querySelector('#sessionExerciseList');
+        if (sessionExerciseList) {
+            sessionExerciseList.innerHTML = exercises.map((ex, index) => `
+                <div class="exercise-item" data-index="${index}">
+                    <div class="exercise-header">
+                        <h3>${ex.name}</h3>
+                        <div class="exercise-meta">
+                            <span>${ex.sets} sets</span>
+                            <span>${ex.reps}</span>
+                            <span>${ex.rest} rest</span>
+                        </div>
+                        <div class="exercise-status">Pending</div>
+                    </div>
+                    <div class="set-tracker">
+                        ${Array(ex.sets).fill().map((_, i) => `
+                            <div class="set-circle" data-set="${i+1}"></div>
+                        `).join('')}
                     </div>
                 </div>
-                <div class="exercise-list">
-                    ${exercises.map((ex, index) => `
-                        <div class="exercise-item" data-index="${index}">
-                            <div class="exercise-header">
-                                <h3>${ex.name}</h3>
-                                <div class="exercise-meta">
-                                    <span>${ex.sets} sets</span>
-                                    <span>${ex.reps}</span>
-                                    <span>${ex.rest} rest</span>
-                                </div>
-                                <div class="exercise-status">Pending</div>
-                            </div>
-                            <div class="set-tracker">
-                                ${Array(ex.sets).fill().map((_, i) => `
-                                    <div class="set-circle" data-set="${i+1}"></div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-                <div class="session-actions">
-                    <button class="btn-primary complete-workout">Complete Workout</button>
-                </div>
-            </div>
-        `;
-        
-        // Add session to the body
-        document.body.appendChild(workoutSession);
+            `).join('');
+        }
         
         // Show session with animation
         setTimeout(() => workoutSession.classList.add('active'), 10);
         
-        // Close session functionality
-        const closeBtn = workoutSession.querySelector('.session-close');
+        // Close button
+        const closeBtn = workoutSession.querySelector('#sessionCloseBtn');
         closeBtn.addEventListener('click', () => {
             if (confirm('Are you sure you want to exit this workout?')) {
                 workoutSession.classList.remove('active');
-                setTimeout(() => workoutSession.remove(), 300);
             }
         });
         
         // Timer functionality
         let seconds = 0;
         let timerInterval;
-        const timerDisplay = workoutSession.querySelector('.timer-display');
-        const startBtn = workoutSession.querySelector('.timer-btn.start');
-        const pauseBtn = workoutSession.querySelector('.timer-btn.pause');
-        const resetBtn = workoutSession.querySelector('.timer-btn.reset');
+        const timerDisplay = workoutSession.querySelector('#timerDisplay');
+        const startBtn = workoutSession.querySelector('#startTimerBtn');
+        const pauseBtn = workoutSession.querySelector('#pauseTimerBtn');
+        const resetBtn = workoutSession.querySelector('#resetTimerBtn');
         
         startBtn.addEventListener('click', () => {
             clearInterval(timerInterval);
@@ -467,11 +499,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // Complete workout button
-        const completeBtn = workoutSession.querySelector('.complete-workout');
+        const completeBtn = workoutSession.querySelector('#completeWorkoutBtn');
         completeBtn.addEventListener('click', () => {
             alert('Great job completing your workout! 💪');
             workoutSession.classList.remove('active');
-            setTimeout(() => workoutSession.remove(), 300);
             
             // Update card progress
             updateCardProgress(workoutTitle, 100);
@@ -726,28 +757,18 @@ document.addEventListener('DOMContentLoaded', function() {
             // Add snacks based on meals per day selection
             if (meals >= 4) {
                 const morningSnack = snackOptions[Math.floor(Math.random() * snackOptions.length)];
-                mealsHTML = mealsHTML.replace('</div>
-                <div class="meal-item">
-                    <div class="meal-time">Lunch', '</div>
-                <div class="meal-item">
-                    <div class="meal-time">Morning Snack</div>
-                    <div class="meal-name">${morningSnack}</div>
-                </div>
-                <div class="meal-item">
-                    <div class="meal-time">Lunch');
+                mealsHTML = mealsHTML.replace(
+                    '</div>\n                <div class="meal-item">\n                    <div class="meal-time">Lunch', 
+                    `</div>\n                <div class="meal-item">\n                    <div class="meal-time">Morning Snack</div>\n                    <div class="meal-name">${morningSnack}</div>\n                </div>\n                <div class="meal-item">\n                    <div class="meal-time">Lunch`
+                );
             }
             
             if (meals >= 5) {
                 const afternoonSnack = snackOptions[Math.floor(Math.random() * snackOptions.length)];
-                mealsHTML = mealsHTML.replace('</div>
-                <div class="meal-item">
-                    <div class="meal-time">Dinner', '</div>
-                <div class="meal-item">
-                    <div class="meal-time">Afternoon Snack</div>
-                    <div class="meal-name">${afternoonSnack}</div>
-                </div>
-                <div class="meal-item">
-                    <div class="meal-time">Dinner');
+                mealsHTML = mealsHTML.replace(
+                    '</div>\n                <div class="meal-item">\n                    <div class="meal-time">Dinner', 
+                    `</div>\n                <div class="meal-item">\n                    <div class="meal-time">Afternoon Snack</div>\n                    <div class="meal-name">${afternoonSnack}</div>\n                </div>\n                <div class="meal-item">\n                    <div class="meal-time">Dinner`
+                );
             }
             
             if (meals >= 6) {
