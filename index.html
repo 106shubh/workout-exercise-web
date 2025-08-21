@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFusion - Your Ultimate Workout Companion</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/interactive-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Authentication Modals -->
+    <div id="modalOverlay" class="modal-overlay"></div>
+    
+    <!-- Login Modal -->
+    <div id="loginModal" class="auth-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Login to FitFusion</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+                <p id="loginError" class="error-message"></p>
+                <button type="submit" class="btn-primary">Login</button>
+            </form>
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="#" id="switchToSignup">Sign up</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Signup Modal -->
+    <div id="signupModal" class="auth-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Create an Account</h2>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" placeholder="Create a password" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupConfirmPassword">Confirm Password</label>
+                    <input type="password" id="signupConfirmPassword" placeholder="Confirm your password" required>
+                </div>
+                <p id="signupError" class="error-message"></p>
+                <button type="submit" class="btn-primary">Sign Up</button>
+            </form>
+            <div class="auth-footer">
+                <p>Already have an account? <a href="#" id="switchToLogin">Login</a></p>
+            </div>
+        </div>
+    </div>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <h1>FitFusion</h1>
+        </div>
+        <div class="nav-links" id="navLinks">
+            <i class="fas fa-times" id="closeMenu"></i>
+            <ul>
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#workouts">Workouts</a></li>
+                <li><a href="#nutrition">Nutrition</a></li>
+                <li><a href="#supplements">Supplements</a></li>
+                <li><a href="#programs">Programs</a></li>
+                <li><a href="#community">Community</a></li>
+                <li><a href="#trainer">Personal Trainer</a></li>
+            </ul>
+        </div>
+        <div class="user-actions">
+            <button class="btn-secondary">Sign Up</button>
+            <button class="btn-primary">Login</button>
+        </div>
+        <div class="user-profile">
+            <span id="userNameDisplay"></span>
+            <div class="profile-dropdown">
+                <button class="profile-btn" id="userProfileBtn">
+                    <i class="fas fa-user-circle"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="#profile">My Profile</a>
+                    <a href="#workouts">My Workouts</a>
+                    <a href="#settings">Settings</a>
+                    <a href="#" id="logoutBtn">Logout</a>
+                </div>
+            </div>
+        </div>
+        <i class="fas fa-bars" id="openMenu"></i>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Transform Your Body,<br>Transform Your Life</h1>
+            <p>Personalized workout plans, nutrition guidance, and a virtual personal trainer to help you achieve your fitness goals.</p>
+            <div class="hero-buttons">
+                <button class="btn-primary">Start Your Journey</button>
+                <button class="btn-secondary">Learn More</button>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="image-container">
+                <!-- Image will be added via CSS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="section-header">
+            <h2>Why Choose FitFusion?</h2>
+            <p>We offer everything you need for your fitness journey in one place</p>
+        </div>
+        <div class="feature-cards">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-dumbbell"></i>
+                </div>
+                <h3>Personalized Workouts</h3>
+                <p>Custom workout plans tailored to your goals, fitness level, and available equipment.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-apple-alt"></i>
+                </div>
+                <h3>Nutrition Guidance</h3>
+                <p>Meal plans and nutritional advice to complement your training regimen.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>AI Personal Trainer</h3>
+                <p>24/7 access to our AI personal trainer for guidance, motivation, and answers.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Community Support</h3>
+                <p>Join our community of fitness enthusiasts for motivation and accountability.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workouts Section -->
+    <section id="workouts" class="workouts">
+        <div class="section-header">
+            <h2>Explore Workouts</h2>
+            <p>Find the perfect workout routine for your goals</p>
+        </div>
+        <div class="category-filter">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="strength">Strength</button>
+            <button class="filter-btn" data-filter="cardio">Cardio</button>
+            <button class="filter-btn" data-filter="flexibility">Flexibility</button>
+            <button class="filter-btn" data-filter="hiit">HIIT</button>
+        </div>
+        <div class="workout-grid">
+            <div class="workout-card" data-category="strength">
+                <div class="workout-image">
+                    <!-- Image will be added via CSS -->
+                    <div class="difficulty">Intermediate</div>
+                </div>
+                <div class="workout-details">
+                    <h3>Full Body Strength</h3>
+                    <div class="workout-meta">
+                        <span><i class="far fa-clock"></i> 45 min</span>
+                        <span><i class="fas fa-fire"></i> 350 cal</span>
+                    </div>
+                    <p>A complete full-body workout targeting all major muscle groups.</p>
+                    <button class="btn-primary">Start Workout</button>
+                </div>
+            </div>
+            <div class="workout-card" data-category="cardio">
+                <div class="workout-image cardio-img">
+                    <!-- Image will be added via CSS -->
+                    <div class="difficulty">Beginner</div>
+                </div>
+                <div class="workout-details">
+                    <h3>Cardio Blast</h3>
+                    <div class="workout-meta">
+                        <span><i class="far fa-clock"></i> 30 min</span>
+                        <span><i class="fas fa-fire"></i> 400 cal</span>
+                    </div>
+                    <p>High-energy cardio workout to boost your heart rate and burn calories.</p>
+                    <button class="btn-primary">Start Workout</button>
+                </div>
+            </div>
+            <div class="workout-card" data-category="flexibility">
+                <div class="workout-image flexibility-img">
+                    <!-- Image will be added via CSS -->
+                    <div class="difficulty">All Levels</div>
+                </div>
+                <div class="workout-details">
+                    <h3>Dynamic Stretching</h3>
+                    <div class="workout-meta">
+                        <span><i class="far fa-clock"></i> 20 min</span>
+                        <span><i class="fas fa-fire"></i> 150 cal</span>
+                    </div>
+                    <p>Improve flexibility and reduce muscle tension with dynamic stretches.</p>
+                    <button class="btn-primary">Start Workout</button>
+                </div>
+            </div>
+            <div class="workout-card" data-category="hiit">
+                <div class="workout-image hiit-img">
+                    <!-- Image will be added via CSS -->
+                    <div class="difficulty">Advanced</div>
+                </div>
+                <div class="workout-details">
+                    <h3>HIIT Inferno</h3>
+                    <div class="workout-meta">
+                        <span><i class="far fa-clock"></i> 25 min</span>
+                        <span><i class="fas fa-fire"></i> 450 cal</span>
+                    </div>
+                    <p>Intense interval training to maximize calorie burn and boost metabolism.</p>
+                    <button class="btn-primary">Start Workout</button>
+                </div>
+            </div>
+        </div>
+        <div class="view-more">
+            <button class="btn-secondary">View All Workouts</button>
+        </div>
+    </section>
+
+    <!-- Nutrition Section -->
+    <section id="nutrition" class="nutrition">
+        <div class="section-header">
+            <h2>Nutrition Guidance</h2>
+            <p>Fuel your body for optimal performance and recovery</p>
+        </div>
+        <div class="nutrition-content">
+            <div class="nutrition-text">
+                <h3>Personalized Meal Plans</h3>
+                <p>Our nutrition experts create customized meal plans based on your:</p>
+                <ul>
+                    <li><i class="fas fa-check"></i> Fitness goals (weight loss, muscle gain, maintenance)</li>
+                    <li><i class="fas fa-check"></i> Dietary preferences and restrictions</li>
+                    <li><i class="fas fa-check"></i> Daily caloric needs and macronutrient balance</li>
+                    <li><i class="fas fa-check"></i> Training schedule and intensity</li>
+                </ul>
+                <button class="btn-primary">Get Your Meal Plan</button>
+            </div>
+            <div class="nutrition-image">
+                <!-- Image will be added via CSS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Supplements Section -->
+    <section id="supplements" class="supplements">
+        <div class="section-header">
+            <h2>Supplements Guide</h2>
+            <p>Learn about supplements that can enhance your fitness journey</p>
+        </div>
+        <div class="supplements-slider">
+            <div class="supplement-card">
+                <div class="supplement-image">
+                    <!-- Image will be added via CSS -->
+                </div>
+                <div class="supplement-details">
+                    <h3>Protein Powders</h3>
+                    <p>Essential for muscle recovery and growth. Choose from whey, plant-based, and more.</p>
+                    <button class="btn-secondary">Learn More</button>
+                </div>
+            </div>
+            <div class="supplement-card">
+                <div class="supplement-image creatine-img">
+                    <!-- Image will be added via CSS -->
+                </div>
+                <div class="supplement-details">
+                    <h3>Creatine</h3>
+                    <p>Helps increase strength, power, and muscle mass during high-intensity training.</p>
+                    <button class="btn-secondary">Learn More</button>
+                </div>
+            </div>
+            <div class="supplement-card">
+                <div class="supplement-image bcaa-img">
+                    <!-- Image will be added via CSS -->
+                </div>
+                <div class="supplement-details">
+                    <h3>BCAAs</h3>
+                    <p>Branched-chain amino acids support muscle recovery and reduce fatigue.</p>
+                    <button class="btn-secondary">Learn More</button>
+                </div>
+            </div>
+        </div>
+        <div class="supplements-disclaimer">
+            <p><i class="fas fa-info-circle"></i> Always consult with a healthcare professional before starting any supplement regimen.</p>
+        </div>
+    </section>
+
+    <!-- Programs Section -->
+    <section id="programs" class="programs">
+        <div class="section-header">
+            <h2>Training Programs</h2>
+            <p>Structured programs to help you reach your fitness goals</p>
+        </div>
+        <div class="programs-grid">
+            <div class="program-card">
+                <div class="program-badge">Most Popular</div>
+                <h3>8-Week Body Transformation</h3>
+                <div class="program-details">
+                    <p><i class="fas fa-calendar-alt"></i> 8 weeks</p>
+                    <p><i class="fas fa-signal"></i> All levels</p>
+                    <p><i class="fas fa-dumbbell"></i> Full body focus</p>
+                </div>
+                <p class="program-description">Complete transformation program including workouts, nutrition plan, and progress tracking.</p>
+                <div class="program-price">
+                    <span class="price">$99</span>
+                    <button class="btn-primary">Join Program</button>
+                </div>
+            </div>
+            <div class="program-card">
+                <div class="program-badge">New</div>
+                <h3>Strength Mastery</h3>
+                <div class="program-details">
+                    <p><i class="fas fa-calendar-alt"></i> 12 weeks</p>
+                    <p><i class="fas fa-signal"></i> Intermediate</p>
+                    <p><i class="fas fa-dumbbell"></i> Strength focus</p>
+                </div>
+                <p class="program-description">Build serious strength with this progressive overload program designed for continuous gains.</p>
+                <div class="program-price">
+                    <span class="price">$129</span>
+                    <button class="btn-primary">Join Program</button>
+                </div>
+            </div>
+            <div class="program-card">
+                <h3>Fat Loss Formula</h3>
+                <div class="program-details">
+                    <p><i class="fas fa-calendar-alt"></i> 6 weeks</p>
+                    <p><i class="fas fa-signal"></i> All levels</p>
+                    <p><i class="fas fa-dumbbell"></i> Fat loss focus</p>
+                </div>
+                <p class="program-description">Scientifically designed program combining HIIT, strength training, and nutrition for maximum fat loss.</p>
+                <div class="program-price">
+                    <span class="price">$79</span>
+                    <button class="btn-primary">Join Program</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section id="community" class="community">
+        <div class="section-header">
+            <h2>Join Our Community</h2>
+            <p>Connect with like-minded fitness enthusiasts</p>
+        </div>
+        <div class="community-features">
+            <div class="community-feature">
+                <div class="community-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h3>Challenges</h3>
+                <p>Participate in monthly fitness challenges and compete with others.</p>
+            </div>
+            <div class="community-feature">
+                <div class="community-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3>Forums</h3>
+                <p>Ask questions, share tips, and connect with the community.</p>
+            </div>
+            <div class="community-feature">
+                <div class="community-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Progress Sharing</h3>
+                <p>Share your fitness journey and celebrate milestones together.</p>
+            </div>
+        </div>
+        <div class="community-cta">
+            <button class="btn-primary">Join Community</button>
+        </div>
+    </section>
+
+    <!-- Personal Trainer Section -->
+    <section id="trainer" class="trainer">
+        <div class="section-header">
+            <h2>Meet Your Personal Trainer</h2>
+            <p>24/7 AI-powered guidance and support</p>
+        </div>
+        <div class="trainer-container">
+            <div class="trainer-avatar">
+                <!-- Avatar will be added via CSS -->
+            </div>
+            <div class="trainer-chat">
+                <div class="chat-header">
+                    <h3>Personal Trainer</h3>
+                    <p>Online</p>
+                </div>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message trainer-message">
+                        <p>Hi there! I'm your personal AI trainer. How can I help you with your fitness journey today?</p>
+                    </div>
+                    <div class="message user-message">
+                        <p>I want to build muscle but I only have dumbbells at home.</p>
+                    </div>
+                    <div class="message trainer-message">
+                        <p>Great! Dumbbells are versatile and perfect for muscle building. I can create a custom dumbbell-only program for you. What's your experience level?</p>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="userMessage" placeholder="Ask your fitness question...">
+                    <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="trainer-features">
+            <div class="trainer-feature">
+                <i class="fas fa-clipboard-list"></i>
+                <p>Workout Form Check</p>
+            </div>
+            <div class="trainer-feature">
+                <i class="fas fa-utensils"></i>
+                <p>Nutrition Advice</p>
+            </div>
+            <div class="trainer-feature">
+                <i class="fas fa-heartbeat"></i>
+                <p>Progress Tracking</p>
+            </div>
+            <div class="trainer-feature">
+                <i class="fas fa-question-circle"></i>
+                <p>24/7 Support</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="section-header">
+            <h2>Success Stories</h2>
+            <p>See what our members have achieved</p>
+        </div>
+        <div class="testimonials-slider">
+            <div class="testimonial-card">
+                <div class="testimonial-image">
+                    <!-- Image will be added via CSS -->
+                </div>
+                <div class="testimonial-content">
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p>"FitFusion transformed my approach to fitness. The personalized workouts and nutrition guidance helped me lose 30 pounds in 3 months!"</p>
+                    <div class="testimonial-author">
+                        <h4>Sarah Johnson</h4>
+                        <p>Member since 2022</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-image testimonial-2">
+                    <!-- Image will be added via CSS -->
+                </div>
+                <div class="testimonial-content">
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p>"The AI Personal Trainer is like having a real coach available 24/7. It's helped me correct my form and optimize my workouts for maximum results."</p>
+                    <div class="testimonial-author">
+                        <h4>Michael Chen</h4>
+                        <p>Member since 2023</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial-dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta">
+        <div class="cta-content">
+            <h2>Ready to Transform Your Fitness Journey?</h2>
+            <p>Join FitFusion today and get access to all features, including your AI Personal Trainer.</p>
+            <button class="btn-primary">Start Your Free Trial</button>
+        </div>
+    </section>
+
+    <!-- Workout Modal -->
+    <div id="workoutModal" class="workout-modal">
+        <span class="modal-close">&times;</span>
+        <div class="workout-modal-content">
+            <div class="modal-header">
+                <h2 id="modalWorkoutTitle">Workout Title</h2>
+                <span class="workout-category" id="modalWorkoutCategory">Category</span>
+            </div>
+            <div class="modal-body">
+                <p class="workout-description" id="modalWorkoutDescription">Workout description will appear here.</p>
+                
+                <div class="workout-details-grid">
+                    <div class="workout-exercises-list">
+                        <h3>Exercises</h3>
+                        <ol id="modalExercisesList">
+                            <!-- Exercises will be populated here -->
+                        </ol>
+                    </div>
+                    
+                    <div class="workout-meta-info">
+                        <div class="meta-item">
+                            <i class="far fa-clock"></i>
+                            <span id="modalWorkoutDuration">30 minutes</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-fire-alt"></i>
+                            <span id="modalWorkoutCalories">300 calories</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-dumbbell"></i>
+                            <span id="modalWorkoutDifficulty">Intermediate</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-toolbox"></i>
+                            <span id="modalWorkoutEquipment">Minimal equipment</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="workout-actions">
+                    <button id="startWorkoutBtn" class="btn btn-primary">Start Workout</button>
+                    <button id="scheduleWorkoutBtn" class="btn btn-secondary">Schedule</button>
+                    <button id="addToFavoritesBtn" class="btn btn-outline add-to-favorites-btn">
+                        <i class="far fa-heart"></i> Add to Favorites
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workout Session -->
+    <div id="workoutSession" class="workout-session">
+        <div class="workout-session-content">
+            <div class="session-header">
+                <h2 id="sessionWorkoutTitle">Workout Title</h2>
+                <span class="session-close">&times;</span>
+            </div>
+            
+            <div class="session-timer">
+                <div class="timer-display" id="timerDisplay">00:00:00</div>
+                <div class="timer-controls">
+                    <button class="timer-btn start" id="startTimerBtn"><i class="fas fa-play"></i></button>
+                    <button class="timer-btn pause" id="pauseTimerBtn"><i class="fas fa-pause"></i></button>
+                    <button class="timer-btn reset" id="resetTimerBtn"><i class="fas fa-redo"></i></button>
+                </div>
+            </div>
+            
+            <div class="exercise-list" id="sessionExerciseList">
+                <!-- Exercise items will be populated here -->
+            </div>
+            
+            <div class="session-actions">
+                <button id="completeWorkoutBtn" class="btn btn-primary">Complete Workout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Meal Plan Modal -->
+    <div id="mealPlanModal" class="meal-plan-modal">
+        <span class="modal-close">&times;</span>
+        <div class="meal-plan-modal-content">
+            <div class="modal-header">
+                <h2>Create Your Meal Plan</h2>
+            </div>
+            <div class="modal-body">
+                <form id="mealPlanForm">
+                    <div class="form-group">
+                        <label for="goalSelect">Your Goal</label>
+                        <select id="goalSelect" required>
+                            <option value="">Select your goal</option>
+                            <option value="weight-loss">Weight Loss</option>
+                            <option value="muscle-gain">Muscle Gain</option>
+                            <option value="maintenance">Maintenance</option>
+                            <option value="performance">Athletic Performance</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dietTypeSelect">Diet Preference</label>
+                        <select id="dietTypeSelect" required>
+                            <option value="">Select diet type</option>
+                            <option value="balanced">Balanced</option>
+                            <option value="high-protein">High Protein</option>
+                            <option value="low-carb">Low Carb</option>
+                            <option value="vegetarian">Vegetarian</option>
+                            <option value="vegan">Vegan</option>
+                            <option value="keto">Keto</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mealsPerDay">Meals Per Day</label>
+                        <div class="range-slider">
+                            <input type="range" id="mealsPerDay" min="3" max="6" value="3" step="1">
+                            <span class="range-value" id="mealsValue">3</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="caloriesRange">Daily Calories</label>
+                        <div class="range-slider">
+                            <input type="range" id="caloriesRange" min="1200" max="3500" value="2000" step="100">
+                            <span class="range-value" id="caloriesValue">2000</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Allergies or Restrictions</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="allergies" value="gluten"> Gluten</label>
+                            <label><input type="checkbox" name="allergies" value="dairy"> Dairy</label>
+                            <label><input type="checkbox" name="allergies" value="nuts"> Nuts</label>
+                            <label><input type="checkbox" name="allergies" value="eggs"> Eggs</label>
+                            <label><input type="checkbox" name="allergies" value="soy"> Soy</label>
+                            <label><input type="checkbox" name="allergies" value="shellfish"> Shellfish</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelMealPlanBtn">Cancel</button>
+                <button type="button" class="btn btn-primary" id="generateMealPlanBtn">Generate Meal Plan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Meal Plan Result Modal -->
+    <div id="mealPlanResultModal" class="meal-plan-result-modal">
+        <span class="modal-close">&times;</span>
+        <div class="meal-plan-result-content">
+            <div class="modal-header">
+                <h2>Your Personalized Meal Plan</h2>
+            </div>
+            <div class="modal-body">
+                <div class="meal-plan-meta">
+                    <div class="meta-item">
+                        <i class="fas fa-bullseye"></i>
+                        <span id="resultGoal">Weight Loss</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-utensils"></i>
+                        <span id="resultDietType">Balanced</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-fire"></i>
+                        <span id="resultCalories">2000 calories</span>
+                    </div>
+                </div>
+                
+                <div class="meal-plan-tabs">
+                    <button class="tab-btn active" data-tab="weeklyPlan">Weekly Plan</button>
+                    <button class="tab-btn" data-tab="shoppingList">Shopping List</button>
+                    <button class="tab-btn" data-tab="nutrition">Nutrition</button>
+                </div>
+                
+                <div class="tab-content active" id="weeklyPlan">
+                    <div class="weekly-meal-plan" id="weeklyMealPlanContent">
+                        <!-- Weekly meal plan will be populated here -->
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="shoppingList">
+                    <div class="shopping-categories" id="shoppingListContent">
+                        <!-- Shopping list will be populated here -->
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="nutrition">
+                    <div class="macros-chart">
+                        <div class="macro-item">
+                            <div class="macro-circle protein">30%</div>
+                            <div class="macro-label">Protein</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-circle carbs">45%</div>
+                            <div class="macro-label">Carbs</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-circle fats">25%</div>
+                            <div class="macro-label">Fats</div>
+                        </div>
+                    </div>
+                    
+                    <div class="nutrition-tips">
+                        <h4>Nutrition Tips</h4>
+                        <ul id="nutritionTipsList">
+                            <!-- Nutrition tips will be populated here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="editMealPlanBtn">Edit Plan</button>
+                <button type="button" class="btn btn-primary" id="saveMealPlanBtn">Save Plan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h2>FitFusion</h2>
+                <p>Your Ultimate Workout Companion</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#workouts">Workouts</a></li>
+                        <li><a href="#nutrition">Nutrition</a></li>
+                        <li><a href="#supplements">Supplements</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Programs</h3>
+                    <ul>
+                        <li><a href="#">Body Transformation</a></li>
+                        <li><a href="#">Strength Mastery</a></li>
+                        <li><a href="#">Fat Loss Formula</a></li>
+                        <li><a href="#">Custom Programs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 FitFusion. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Chatbot Toggle Button -->
+    <div class="chat-toggle" id="chatToggle">
+        <i class="fas fa-comment-dots"></i>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/chatbot.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

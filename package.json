@@ -1,0 +1,24 @@
+{
+  "name": "fitfusion",
+  "version": "1.0.0",
+  "description": "FitFusion - Your Ultimate Workout Companion",
+  "main": "index.html",
+  "scripts": {
+    "deploy": "node deploy.js",
+    "deploy:netlify": "node netlify-deploy.js",
+    "start": "npx serve"
+  },
+  "keywords": [
+    "fitness",
+    "workout",
+    "health"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "archiver": "^5.3.1"
+  },
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}
